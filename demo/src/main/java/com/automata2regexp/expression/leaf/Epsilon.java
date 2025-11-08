@@ -1,5 +1,8 @@
 package com.automata2regexp.expression.leaf;
 
+import javax.swing.tree.ExpandVetoException;
+
+import com.automata2regexp.automate.Etat;
 import com.automata2regexp.expression.Expression;
 
 public class Epsilon implements Expression{
@@ -24,4 +27,8 @@ public class Epsilon implements Expression{
         return 1;
     }
     
+    @Override
+    public Expression substituer(Etat aRemplacer, Expression remplacement) {
+        return this;
+    }
 }

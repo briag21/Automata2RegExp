@@ -1,5 +1,6 @@
 package com.automata2regexp.expression.operations;
 
+import com.automata2regexp.automate.Etat;
 import com.automata2regexp.expression.Expression;
 
 public record Etoile(Expression enfant) implements Expression {
@@ -10,6 +11,14 @@ public record Etoile(Expression enfant) implements Expression {
         String e = enfant.toString();
 
         return (needsParent ? "(" +e+")" : e)+"*";
+    }
+
+    // ... (dans le record Union)
+    @Override
+    public Expression substituer(Etat aRemplacer, Expression remplacement) {
+        
+        Expression nouvelEnfant = enfant.substituer(aRemplacer, remplacement);
+        return new Etoile(nouvelEnfant);
     }
     
 }

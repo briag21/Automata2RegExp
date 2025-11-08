@@ -1,5 +1,6 @@
 package com.automata2regexp.expression.leaf;
 
+import com.automata2regexp.automate.Etat;
 import com.automata2regexp.expression.Expression;
 
 public  class Vide implements Expression {
@@ -22,6 +23,11 @@ public  class Vide implements Expression {
     @Override
     public int hashCode(){
         return 0;
+    }
+
+    @Override
+    public Expression substituer(Etat aRemplacer, Expression remplacement) {
+        return this;
     }
     
 }
