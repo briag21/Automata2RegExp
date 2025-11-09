@@ -76,7 +76,13 @@ public class SolverArden {
             Etat etat_i = etatsOrdonnes.get(i);
             Equation eq_i = systeme.get(etat_i);
 
-            Expression solution_i = new Concatenation(new Etoile(eq_i.getA()), eq_i.getB());
+            Equation eq_factorisee = refactoriserEquation(eq_i, etat_i); // permet de s'occuper du cas où B contient L_i dans L_i = A+B
+            System.out.println("Expression bien factorisée.");
+            Expression A_Clean = eq_factorisee.getA();
+            Expression B_Clean = eq_factorisee.getB();
+
+
+            Expression solution_i = new Concatenation(new Etoile(A_Clean), B_Clean);
 
             solutions.put(etat_i, solution_i);
 
@@ -93,6 +99,48 @@ public class SolverArden {
         if(a == null || a.equals(Vide.INSTANCE)) return b;
         if(b == null || b.equals(Vide.INSTANCE)) return a;
         return new Union(a, b);
+    }
+
+    private Equation refactoriserEquation(Equation eq, Etat etat){ //on factorise L_i tq L_i = A+B avec L_i pas dans B
+        Expression A = eq.getA();
+        Expression B =  eq.getB();
+
+        ContainerLi result = extraireTermes(B, etat);
+
+        Expression C = result.A();
+        Expression B_propre = result.B();
+
+        Expression A_new = union (A,C);
+         
+        return new Equation(etat, A_new, B_propre);
+    }
+
+    private ContainerLi extraireTermes(Expression expr, Etat etat){
+        if(expr instanceof Variable v && v.etat().equals(etat)){
+            return new ContainerLi(Epsilon.INSTANCE, Vide.INSTANCE);
+        }
+
+        if(expr instanceof Union u){
+            ContainerLi gauche = extraireTermes(u.gauche(), etat);
+            ContainerLi droite = extraireTermes(u.droite(), etat);
+            return new ContainerLi(
+                union(gauche.A(), droite.A()),
+                union(gauche.B(), droite.B())
+            );
+
+        }
+
+        if(expr instanceof Concatenation c){
+            //si c'est de la forme B=Qqchose*L_i alors B est vide et on récupère la partie concaténée à L_i
+            if(c.droite() instanceof Variable v && v.etat().equals(etat)){
+                return new ContainerLi(c.gauche(), Vide.INSTANCE);
+            }
+
+
+        }
+
+        //cas où L_i n'est pas dans B, B est déjà "propre"
+        return new ContainerLi(Vide.INSTANCE, expr);
     }
     
 }
