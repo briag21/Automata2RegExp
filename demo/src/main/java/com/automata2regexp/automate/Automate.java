@@ -27,6 +27,24 @@ public class Automate{
         }
     }
 
+    public void supprimerEtat(Etat etat){
+        if(etat == null)return;
+
+        etats.remove(etat);
+        etatFin.remove(etat);
+
+        if(etat.equals(this.etatInit)){
+            this.etatInit=null;
+        }
+
+
+    }
+
+    public void supprimerTransition(Transition transition){
+        if(transition==null)return;
+        transitions.remove(transition);
+    }
+
     public void ajouterTransition(Transition transition){
         if(etats.contains(transition.depart()) && etats.contains(transition.arrivee())){
             this.transitions.add(transition);
