@@ -54,7 +54,7 @@ public class FenetrePrincipale extends JFrame{
 
         JButton btnAjouterEtat = new JButton("Ajouter un état");
         JButton btnAjouterTransition = new JButton("Ajouter une transition");
-        JButton btnModifierAutomate = new JButton("Modifier automate (en dev)");
+        JButton btnModifierAutomate = new JButton("Modifier automate");
         JButton btnResoudre = new JButton("Convertir en RegExp");
 
         toolBar.add(btnAjouterEtat);
@@ -196,11 +196,26 @@ public class FenetrePrincipale extends JFrame{
     }
 
     public void rafraichirGrapheComplet(){
+        // Retirer l'ancien graphComponent
+        getContentPane().remove(graphComponent);
+        
+        // Recréer complètement le graph
+        this.graph = new mxGraph();
+        this.graph.setCellsMovable(false);     
+        this.graph.setCellsEditable(false);     
+        this.graph.setCellsResizable(false);    
+        this.graph.setCellsDeletable(false);   
+        this.graph.setCellsBendable(false);  
+        this.graph.setCellsDisconnectable(false);
+        
+        // Recréer le graphComponent
+        this.graphComponent = new mxGraphComponent(graph);
+        this.graphComponent.setConnectable(false);
+        
+        mapCellulesEtat.clear();
+
         graph.getModel().beginUpdate();
         try {
-            graph.removeCells(graph.getChildVertices(graph.getDefaultParent()));
-            mapCellulesEtat.clear();
-
             for(Etat etat : automate.getEtats()){
                 String style = "shape=ellipse;strokeColor=black;";
                 if (etat.getEstFinal()) {
@@ -219,16 +234,23 @@ public class FenetrePrincipale extends JFrame{
 
                 if(cellDepart!=null && cellArrivee != null){
                     graph.insertEdge(graph.getDefaultParent(), null, t.symbole(), cellDepart, cellArrivee);
-
                 }
             }
 
+            // Appliquer le layout
+            mxIGraphLayout layout = new mxHierarchicalLayout(graph);
+            layout.execute(graph.getDefaultParent());
             
         } finally {
             graph.getModel().endUpdate();
         }
-
-        appliquerLayout();
+        
+        // Rajouter le nouveau graphComponent
+        getContentPane().add(graphComponent, BorderLayout.CENTER);
+        
+        // Forcer la validation et le repaint
+        getContentPane().revalidate();
+        getContentPane().repaint();
     }
 
     
