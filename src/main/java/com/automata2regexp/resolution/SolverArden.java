@@ -77,7 +77,6 @@ public class SolverArden {
             Equation eq_i = systeme.get(etat_i);
 
             Equation eq_factorisee = refactoriserEquation(eq_i, etat_i); // permet de s'occuper du cas où B contient L_i dans L_i = A+B
-            System.out.println("Expression bien factorisée.");
             Expression A_Clean = eq_factorisee.getA();
             Expression B_Clean = eq_factorisee.getB();
 
@@ -131,16 +130,29 @@ public class SolverArden {
         }
 
         if(expr instanceof Concatenation c){
-            //si c'est de la forme B=Qqchose*L_i alors B est vide et on récupère la partie concaténée à L_i
-            if(c.droite() instanceof Variable v && v.etat().equals(etat)){
-                return new ContainerLi(c.gauche(), Vide.INSTANCE);
-            }
+            ContainerLi droite = extraireTermes(c.droite(), etat);
+
+            //g*d=g*(A_d*L_i + B_d) = (g*A_d)*L_i + (g*B_d)
+            Expression newA = concat(c.gauche(), droite.A());
+            Expression newB = concat(c.gauche(), droite.B());
+
+            return new ContainerLi(newA, newB);
+
 
 
         }
 
         //cas où L_i n'est pas dans B, B est déjà "propre"
         return new ContainerLi(Vide.INSTANCE, expr);
+    }
+
+    private Expression concat(Expression a, Expression b){
+        if(a.equals(Vide.INSTANCE) || b.equals(Vide.INSTANCE))return Vide.INSTANCE;
+        if(a.equals(Epsilon.INSTANCE)) return b;
+        if(b.equals(Epsilon.INSTANCE)) return a;
+
+        return new Concatenation(a, b);
+
     }
     
 }

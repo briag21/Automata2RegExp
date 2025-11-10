@@ -93,7 +93,7 @@ public class FenetrePrincipale extends JFrame{
                 passe++;
             }
 
-            String message = "Solution Brute : \n" + solutionBrut + "Solution Simplifiée : \n" + solutionSimp;
+            String message = "Solution Brute : \n" + solutionBrut +"\n" + "Solution Simplifiée : \n" + solutionSimp;
             
             JTextArea textArea = new JTextArea(message);
             textArea.setEditable(false);
