@@ -7,9 +7,9 @@ public class Etat {
     private boolean estInitial;
     private boolean estFinal;
 
-    public Etat(String nom, boolean estInitinal, boolean estFinal){
+    public Etat(String nom, boolean estInitial, boolean estFinal){
         this.nom = nom;
-        this.estInitial = estInitinal;
+        this.estInitial = estInitial;
         this.estFinal = estFinal;
     }
 

@@ -54,7 +54,7 @@ public class FenetrePrincipale extends JFrame{
 
         JButton btnAjouterEtat = new JButton("Ajouter un état");
         JButton btnAjouterTransition = new JButton("Ajouter une transition");
-        JButton btnModifierAutomate = new JButton("Modifier automate");
+        JButton btnModifierAutomate = new JButton("Modifier automate (en dev)");
         JButton btnResoudre = new JButton("Convertir en RegExp");
 
         toolBar.add(btnAjouterEtat);
@@ -76,7 +76,6 @@ public class FenetrePrincipale extends JFrame{
             SolverArden solveur = new SolverArden(this.automate);
             Expression solutionBrut = solveur.resoudre();
 
-            Simplificateur simplificateur = new Simplificateur();
             Expression solutionSimp = solutionBrut;
             String strAvant = solutionBrut.toString();
             String strApres = "";
@@ -88,7 +87,7 @@ public class FenetrePrincipale extends JFrame{
                     strAvant=strApres;
                 }
 
-                solutionSimp = simplificateur.simplifier(solutionSimp);
+                solutionSimp = Simplificateur.simplifier(solutionSimp);
                 strApres = solutionSimp.toString();
                 passe++;
             }
