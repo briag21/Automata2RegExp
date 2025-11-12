@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -57,10 +58,16 @@ public class FenetrePrincipale extends JFrame{
         JButton btnModifierAutomate = new JButton("Modifier automate");
         JButton btnResoudre = new JButton("Convertir en RegExp");
 
+        JButton btnCredit = new JButton("Crédit");
+
         toolBar.add(btnAjouterEtat);
         toolBar.add(btnAjouterTransition);
         toolBar.add(btnModifierAutomate);
         toolBar.add(btnResoudre);
+
+        toolBar.add(Box.createHorizontalGlue());
+        toolBar.add(btnCredit);
+
         getContentPane().add(toolBar, BorderLayout.NORTH);
 
         btnAjouterEtat.addActionListener(e -> ajouterEtat());
@@ -98,9 +105,19 @@ public class FenetrePrincipale extends JFrame{
             textArea.setEditable(false);
             JScrollPane scrollPane = new JScrollPane(textArea);
             scrollPane.setPreferredSize(new Dimension(500, 200));
-            JOptionPane.showMessageDialog(this, scrollPane, "Expression régulière + \n", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, scrollPane, "Expression régulière", JOptionPane.INFORMATION_MESSAGE);
 
         });
+
+        btnCredit.addActionListener(e -> {
+            String message = "Briag GUEGAN-ROYAN \n Université de Rennes \n L3 2025"; 
+            JTextArea textArea = new JTextArea(message);
+            textArea.setEditable(false);
+            JScrollPane scrollPane = new JScrollPane(textArea);
+            scrollPane.setPreferredSize(new Dimension(500, 200));
+            JOptionPane.showMessageDialog(this, scrollPane, "Crédit", JOptionPane.INFORMATION_MESSAGE);
+
+        });;
 
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
